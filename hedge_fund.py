@@ -11,11 +11,7 @@ load_dotenv()
 # We set it to "NA" to bypass that check without crashing.
 os.environ["OPENAI_API_KEY"] = "NA"
 
-# We define the model as a string. 
-# The "gemini/" prefix tells CrewAI to use Google.
-# We use 1.5-flash first to GUARANTEE it works, then you can swap to 2.0/3.0.
-# TO THIS:
-my_llm = "gemini/gemini-3-flash-preview"
+my_llm = "gemini/gemini-flash-latest"
 
 # 2. Define Agents (Using the string, not the object)
 analyst = Agent(
@@ -37,20 +33,25 @@ trader = Agent(
 )
 
 # 3. Define Tasks
-current_date = datetime.now().strftime("%Y-%m-%d")
+current_date_str = datetime.now().strftime("%Y-%m-%d")
+datetime_str = datetime.now().strftime("%Y-%m-%d_%H-%M")
+
+# Create a folder for today's run
+output_folder = f"outputs/{current_date_str}"
+os.makedirs(output_folder, exist_ok=True)
 
 task_analysis = Task(
-    description=f"Analyze the impact of 'AI Regulation' on Tech Stocks. Today is {current_date}.",
+    description=f"Analyze the impact of recent SaaS selloff on Tech Stocks. How widespread was it, which sectors most affected and which stocks were 'unfairly' impacted? Specifically what do you think about AMZN, GOOGL, META, MSFT, PLTR? Today is {current_date_str}.",
     expected_output="A risk assessment report.",
     agent=analyst,
-    output_file='outputs/analysis_report.md'
+    output_file=f'{output_folder}/analysis_report_{datetime_str}.md'
 )
 
 task_trade = Task(
-    description=f"Based on the analysis, propose a trade (Buy/Sell/Hold). Today is {current_date}.",
+    description=f"Based on the analysis, propose a trade (Buy/Sell/Hold). Today is {current_date_str}.",
     expected_output="A structured trade plan.",
     agent=trader,
-    output_file='outputs/trade_plan.md'
+    output_file=f'{output_folder}/trade_plan_{datetime_str}.md'
 )
 
 # 4. Form the Crew
@@ -63,18 +64,9 @@ hedge_fund_crew = Crew(
 )
 
 # 5. Kickoff
-print("🚀 Launching Crew with Gemini Flash...")
+print(f"🚀 Launching Crew with {my_llm}...")
+print(f"📂 Saving outputs to: {output_folder}")
 result = hedge_fund_crew.kickoff()
 print(result)
 
-# Add this to the bottom of hedge_fund.py
-from datetime import datetime
-
-# Generate a filename with today's date
-filename = f"outputs/trade_plan_{datetime.now().strftime('%Y-%m-%d_%H-%M')}.md"
-
-# Save the result
-with open(filename, "w") as file:
-    file.write(result.raw) # .raw extracts the clean text
-
-print(f"✅ Report saved to {filename}")
+print(f"✅ Reports saved in {output_folder}")
