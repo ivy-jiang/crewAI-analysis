@@ -15,16 +15,16 @@ my_llm = "gemini/gemini-flash-latest"
 
 # 2. Define Agents (Using the string, not the object)
 analyst = Agent(
-    role='Senior Macro Analyst',
+    role='Senior Macro and Equity Analyst',
     goal='Analyze market sentiment',
-    backstory="You are a veteran macro strategist. You digest news to find the signal.",
+    backstory="You are a veteran macro and equity strategist. You digest news to find the signal.",
     verbose=True,
     llm=my_llm,  # <--- Pass the string here!
     allow_delegation=False
 )
 
 trader = Agent(
-    role='Head of Execution',
+    role='Trader and Structurer',
     goal='Execute profitable trades',
     backstory="You are a disciplined trader. You focus on risk and reward.",
     verbose=True,
@@ -41,7 +41,7 @@ output_folder = f"outputs/{current_date_str}"
 os.makedirs(output_folder, exist_ok=True)
 
 task_analysis = Task(
-    description=f"Analyze the impact of recent SaaS selloff on Tech Stocks. How widespread was it, which sectors most affected and which stocks were 'unfairly' impacted? Specifically what do you think about AMZN, GOOGL, META, MSFT, PLTR? Today is {current_date_str}.",
+    description=f"Analyze the impact of recent SaaS selloff on Tech Stocks. Specifically what do you think about AMZN, GOOGL, META, MSFT, PLTR? What other stocks to pay attention to either glaringly positive or negative? Today is {current_date_str}.",
     expected_output="A risk assessment report.",
     agent=analyst,
     output_file=f'{output_folder}/analysis_report_{datetime_str}.md'
