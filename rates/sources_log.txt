@@ -1,0 +1,6 @@
+[2026-02-07 14:47:49] SEARCH: latest 2Y and 10Y UST yields as of 2026-02-07
+[2026-02-07 14:47:52] SCRAPE: https://www.federalreserve.gov/newsevents/speeches.htm
+[2026-02-07 14:48:17] SEARCH: impact of higher for longer fed policy on USD and Gold
+[2026-02-07 14:49:38] SEARCH: latest 2Y and 10Y UST yields 2026-02-07
+[2026-02-07 14:49:42] SCRAPE: https://www.federalreserve.gov/newsevents/speeches.htm
+[2026-02-07 14:49:57] SEARCH: Bank of Japan policy and yield curve control expectations February 2026
